@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Image Loader</string>
+    <string name="app_label">Image Loader</string>
+    <string name="search_hint">Search images of</string>
+</resources>
