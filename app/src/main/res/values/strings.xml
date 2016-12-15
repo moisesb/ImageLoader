@@ -2,4 +2,7 @@
     <string name="app_name">Image Loader</string>
     <string name="app_label">Image Loader</string>
     <string name="search_hint">Search images of</string>
+    <string name="search_something_message">Type something cool in the search bar</string>
+    <string name="no_results_found">No images found for \"%1$s\"</string>
+    <string name="check_connection">Please, check your internet connection</string>
 </resources>

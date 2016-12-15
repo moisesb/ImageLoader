@@ -39,6 +39,10 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
         notifyItemInserted(mImages.size() - 1);
     }
 
+    public boolean isEmpty() {
+        return mImages.size() == 0;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View layout = LayoutInflater.from(parent.getContext())
@@ -53,6 +57,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
         mPicasso.load(image.getThumbnailUrl())
                 .fit()
                 .centerCrop()
+                .error(R.drawable.ic_image_broken_variant_grey600_36dp)
                 .into(holder.mImageView, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -61,7 +66,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
 
                     @Override
                     public void onError() {
-                        Log.d("Adapter", "error on load " + image.getContentUrl());
+                        Log.d("Adapter", "could not load " + image.getContentUrl());
                     }
                 });
     }
@@ -70,6 +75,7 @@ public class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder
     public int getItemCount() {
         return mImages.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         final ImageView mImageView;
