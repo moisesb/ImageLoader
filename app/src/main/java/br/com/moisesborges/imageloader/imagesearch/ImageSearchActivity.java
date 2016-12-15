@@ -4,25 +4,19 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -152,11 +146,13 @@ public class ImageSearchActivity extends AppCompatActivity {
                     public void onError(Throwable e) {
                         showProgressBar(false);
                         if (e instanceof HttpException) {
-
+                            HttpException httpException = (HttpException) e;
+                            Log.d("onError", httpException.code() + " " + httpException.message());
                         }
 
                         if (e instanceof IOException) {
-
+                            Log.d("onError", "network error");
+                            e.printStackTrace();
                         }
                     }
 
@@ -183,64 +179,4 @@ public class ImageSearchActivity extends AppCompatActivity {
         mAdapter.clearImages();
     }
 
-    static class ImagesAdapter extends RecyclerView.Adapter<ImagesAdapter.ViewHolder> {
-
-        private List<Image> mImages = new ArrayList<>();
-        private Picasso mPicasso;
-
-        public ImagesAdapter(Picasso picasso) {
-            mPicasso = picasso;
-        }
-
-        public void clearImages() {
-            mImages.clear();
-            notifyDataSetChanged();
-        }
-
-        public void addImage(@NonNull Image image) {
-            mImages.add(image);
-            notifyItemInserted(mImages.size() - 1);
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View layout = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.image_view_group_item, parent, false);
-            return new ViewHolder(layout);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            final Image image = mImages.get(position);
-
-            mPicasso.load(image.getThumbnailUrl())
-                    .fit()
-                    .centerCrop()
-                    .into(holder.mImageView, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-                            Log.d("Adapter", "error on load " + image.getContentUrl());
-                        }
-                    });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mImages.size();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            final ImageView mImageView;
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-                mImageView = (ImageView) itemView.findViewById(R.id.image_view);
-            }
-        }
-    }
 }
